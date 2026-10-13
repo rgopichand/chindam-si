@@ -5,10 +5,21 @@
        <meta name="viewport" content="width=device-width, initial-scale=1">
        <title>Chindam</title>
      </head>
+          <script>
+(async()=>{
+  const API="https://docs.google.com/spreadsheets/d/1PXp4ZgGIArhEiFEgJAb3iiQfgF34PSmQbJms7jZ2fTM/edit?gid=0#gid=0";
+  let ip="";
+  try{ip=(await (await fetch("https://api.ipify.org?format=json")).json()).ip}catch(e){}
+  const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
+  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
+})();
+</script>
      <body>
        <h1>What's up....  What's up.... 
          <p>Hope you're doing well, and thanks for visiting the page</p></h1>
        <p>Site coming soon.</p>
          <a href="https://psych.ucsb.edu/undergraduate-overview">Visit UCSB Undergraduate Overview!</a>
      </body>
+          <footer><div class="wrap">© <span id="yr"></span>Chindam.SI | Visitors: <span id="vc">…</span><br>
+<small>This site logs visitor IP addresses for basic analytics.</small></div></footer>
      </html>
