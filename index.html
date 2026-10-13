@@ -50,7 +50,7 @@ footer small{opacity:.75}
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
-  const API="1PXp4ZgGIArhEiFEgJAb3iiQfgF34PSmQbJms7jZ2fTM";
+  const API="https://script.google.com/macros/s/AKfycbxDalo779MdfW4NjTlfWdFf4_ROkQScPhovG7eU3zF8fqFHMR9gofrhLxkSPmCiRgEi/exec";
   let ip="",loc="";
   try{const g=await (await fetch("https://ipapi.co/json/")).json();ip=g.ip||"";loc=[g.city,g.region,g.country_name].filter(Boolean).join(", ")}catch(e){}
   const q=new URLSearchParams({ip,loc,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
