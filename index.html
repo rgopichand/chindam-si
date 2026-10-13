@@ -54,7 +54,7 @@ document.getElementById("yr").textContent = new Date().getFullYear();
   let ip="",loc="";
   try{const g=await (await fetch("https://ipapi.co/json/")).json();ip=g.ip||"";loc=[g.city,g.region,g.country_name].filter(Boolean).join(", ")}catch(e){}
   const q=new URLSearchParams({ip,loc,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
-  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
+  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){console.log(e)}
 })();
 </script>
 </body>
