@@ -45,16 +45,16 @@ footer small{opacity:.75}
 </main>
 
 <footer>© <span id="yr"></span> Chindam.SI · Visitors: <span id="vc">…</span><br>
-<small>This site logs visitor IP addresses and approximate location for basic analytics.</small></footer>
+<small>This site logs visitor IP addresses for basic analytics.</small></footer>
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
   const API="https://script.google.com/macros/s/AKfycbwmtmxj2MdOXGudfQLnpw8beCOkWugsuvPyuC3oWXVd8eBkcDqkmhjrdEEnQQlmqW31/exec";
-  let ip="",loc="";
-  try{const g=await (await fetch("https://ipapi.co/json/")).json();ip=g.ip||"";loc=[g.city,g.region,g.country_name].filter(Boolean).join(", ")}catch(e){}
-  const q=new URLSearchParams({ip,loc,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
-  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){console.log(e)}
+  let ip="";
+  try{ip=(await (await fetch("https://api.ipify.org?format=json")).json()).ip}catch(e){}
+  const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
+  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
 })();
 </script>
 </body>
