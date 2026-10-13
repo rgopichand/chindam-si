@@ -17,7 +17,7 @@
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
-  const API="https://script.google.com/macros/s/AKfycbxHo1vG_Bu1qIGZTNOGQM6sX8uAdBg5362xelUPAgyxxKw8UexVCcmO2PCGotKNBO3p/exec";
+  const API="https://script.google.com/macros/s/AKfycbxDalo779MdfW4NjTlfWdFf4_ROkQScPhovG7eU3zF8fqFHMR9gofrhLxkSPmCiRgEi/exec";
   let ip="";
   try{ip=(await (await fetch("https://api.ipify.org?format=json")).json()).ip}catch(e){}
   const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
