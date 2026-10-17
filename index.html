@@ -14,7 +14,7 @@ body{
   background:#1f3b2d url("26340640.jpg") center/cover fixed;
   display:flex;flex-direction:column;min-height:100vh;
 }
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px}
 .card{
   max-width:620px;width:100%;text-align:center;padding:16px;
   animation:rise .9s ease-out both;
@@ -25,39 +25,19 @@ h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px;font-weight:700;letter-spacing
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}}
 p{font-weight:300;font-size:18px;line-height:1.6;margin:0 0 10px;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
 .soon{display:inline-block;margin:14px 0 26px;padding:4px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,0.2)}
-
-/* Positions the button to the top-left of the viewport */
-.btn-top-left {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: 30px;
-  background: var(--accent);
-  color: #123;
-  font-weight: 500;
-  text-decoration:none;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.btn-top-left:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
-
-footer{text-align:center;padding:18px 16px;font-size:14px;background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);color:#000}
-footer small{font-weight:500;opacity:0.85}
+.btn{display:inline-block;padding:12px 24px;border-radius:30px;background:var(--accent);color:#123;font-weight:500;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+footer{text-align:center;padding:18px 16px;font-size:14px;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)}
+footer small{opacity:.75}
 </style>
 </head>
 <body>
-
-<!-- Button moved out of the main card to the top left -->
-<a class="btn-top-left" href="https://ucsb.edu" target="_blank" rel="noopener">Visit UCSB Undergraduate Overview</a>
-
 <main>
   <div class="card">
     <h1>What's up <span class="wave">👋</span></h1>
     <p>Hope you're doing well, and thanks for visiting the page.</p>
-    <span class="soon">Site coming soon</span>
+    <span class="soon">Site coming soon</span><br>
+    <a class="btn" href="https://ucsb.edu" target="_blank" rel="noopener">Visit UCSB Undergraduate Overview</a>
   </div>
 </main>
 
