@@ -4,45 +4,39 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chindam</title>
-<link href="https://googleapis.com" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Spectral:wght@800&display=swap" rel="stylesheet">
 <style>
-:root{--text:#fff;--accent:#9be7c4;--line:rgba(255,255,255,.3)}
+:root{--text:#fff;--line:rgba(255,255,255,.3)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{
   font-family:Poppins,system-ui,sans-serif;color:var(--text);
-  background:#1f3b2d url("26340640.jpg") center/cover fixed;
+  background:#1f3b2d url("26340638.jpg") center/cover fixed;
   display:flex;flex-direction:column;min-height:100vh;
 }
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative}
-.card{
-  max-width:620px;width:100%;text-align:center;padding:16px;
+main{flex:1}
+
+/* Invisible link over the blue UC Santa Barbara logo in the photo */
+.logo-link{position:fixed;z-index:10;display:block;border-radius:2px}
+.logo-link:hover,.logo-link:focus-visible{outline:2px solid rgba(255,255,255,.8);outline-offset:2px}
+
+/* Text on the wall, styled like the carved lettering */
+.wall{
+  position:fixed;z-index:5;text-align:left;
+  font-family:Spectral,Georgia,"Times New Roman",serif;font-weight:800;text-transform:uppercase;
+  color:#4a4135;letter-spacing:.02em;line-height:1.1;
+  /* raised bronze letters: light top edge, solid side, soft cast shadow on the stone */
+  text-shadow:-1px -1px 0 rgba(255,228,185,.55),1px 1px 0 #2b251d,2px 2px 0 #2b251d,4px 6px 5px rgba(70,40,10,.45);
   animation:rise .9s ease-out both;
 }
-@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px;font-weight:700;letter-spacing:.5px;text-shadow:0 2px 10px rgba(0,0,0,0.5)}
-.wave{display:inline-block;animation:wave 2s infinite;transform-origin:70% 70%}
-@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}}
-p{font-weight:300;font-size:18px;line-height:1.6;margin:0 0 10px;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
-.soon{display:inline-block;margin:14px 0 26px;padding:4px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,0.2)}
+.wall h1{margin:0;font-size:1em}
+.wall p{margin:.45em 0 0;font-size:.36em}
+.wall .soon{margin-top:.7em;font-size:.28em;letter-spacing:.14em}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-/* Positions the button to the top-left of the viewport */
-.btn-top-left {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 10;
-  display: inline-block;
-  padding: 12px 24px;
-  border-radius: 30px;
-  background: var(--accent);
-  color: #123;
-  font-weight: 500;
-  text-decoration:none;
-  transition: transform .2s, box-shadow .2s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-.btn-top-left:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
+/* Fallback when the wall is off-screen (phones) */
+.wall.centered{left:16px!important;right:16px;top:38%!important;width:auto!important;
+  text-align:center;color:#fff;font-size:34px!important;text-shadow:0 2px 8px rgba(0,0,0,.7)}
 
 footer{text-align:center;padding:18px 16px;font-size:14px;background:rgba(255,255,255,0.45);backdrop-filter:blur(6px);color:#000}
 footer small{font-weight:500;opacity:0.85}
@@ -50,14 +44,13 @@ footer small{font-weight:500;opacity:0.85}
 </head>
 <body>
 
-<!-- Button moved out of the main card to the top left -->
-<a class="btn-top-left" href="https://ucsb.edu" target="_blank" rel="noopener">Visit UCSB Undergraduate Overview</a>
+<a class="logo-link" id="logo" href="https://ucsb.edu" target="_blank" rel="noopener" aria-label="Visit UCSB Undergraduate Overview" title="Visit UCSB Undergraduate Overview"></a>
 
 <main>
-  <div class="card">
-    <h1>What's up <span class="wave">👋</span></h1>
+  <div class="wall" id="wall">
+    <h1>What's Up</h1>
     <p>Hope you're doing well, and thanks for visiting the page.</p>
-    <span class="soon">Site coming soon</span>
+    <p class="soon">Site coming soon</p>
   </div>
 </main>
 
@@ -66,10 +59,34 @@ footer small{font-weight:500;opacity:0.85}
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* Pin the logo link and wall text to spots in the photo.
+   x = fraction of photo width; y = distance from photo center, in photo widths.
+   Tweak these if things don't line up. */
+const SPOTS = {
+  logo:{x:.0146, y:-.2625, w:.1448, h:.0292},
+  wall:{x:.560,  y:-.0680, w:.330,  size:.031}
+};
+const img = new Image();
+img.src = "26340638.jpg";
+function place(){
+  if(!img.naturalWidth) return;
+  const vw = innerWidth, vh = innerHeight, ar = img.naturalWidth/img.naturalHeight;
+  const W = Math.max(vw, vh*ar), left = (vw-W)/2, cy = vh/2;
+  const L = document.getElementById("logo"), s = SPOTS.logo;
+  Object.assign(L.style,{left:left+s.x*W+"px",top:cy+s.y*W+"px",width:s.w*W+"px",height:s.h*W+"px"});
+  const T = document.getElementById("wall"), w = SPOTS.wall;
+  const tl = left+w.x*W, tw = w.w*W;
+  T.classList.toggle("centered", vw < 700 || tl < 0 || tl+tw > vw);
+  Object.assign(T.style,{left:tl+"px",top:cy+w.y*W+"px",width:tw+"px",fontSize:w.size*W+"px"});
+}
+img.onload = place;
+addEventListener("resize", place);
+
 (async()=>{
-  const API="https://google.com";
+  const API="PASTE_SCRIPT_EXEC_URL_HERE";
   let ip="";
-  try{ip=(await (await fetch("https://ipify.org")).json()).ip}catch(e){}
+  try{ip=(await (await fetch("https://api.ipify.org?format=json")).json()).ip}catch(e){}
   const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
   try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
 })();
