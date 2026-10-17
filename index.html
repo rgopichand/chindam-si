@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chindam</title>
-<!-- Corrected Poppins typeface import from the Google Fonts CDN -->
 <link href="https://googleapis.com" rel="stylesheet">
 <style>
 :root{--text:#fff;--line:rgba(255,255,255,.3)}
@@ -37,7 +36,7 @@ main {
   position: relative;
 }
 
-/* Shifted container further up to position the elements higher on the stone wall background */
+/* Shifted container up to position elements nicely on the wall */
 .card {
   max-width: 650px;
   width: 100%;
@@ -47,27 +46,6 @@ main {
   animation: rise .9s ease-out both;
 }
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-
-/* Styled to match the metallic depth of the physical letters on the wall */
-h1 {
-  font-size: clamp(28px, 5vw, 42px);
-  margin: 0 0 8px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 0px rgba(0,0,0,0.2);
-}
-.wave{display:inline-block;animation:wave 2s infinite;transform-origin:70% 70%}
-@keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}}
-
-p {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5;
-  margin: 0 0 16px;
-  color: #e0e0e0;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-}
 
 .soon {
   display: inline-block;
@@ -94,7 +72,6 @@ footer small{font-weight:500;opacity:0.85}
 </head>
 <body>
 
-<!-- This anchor covers the top-left area where the blue banner sits on the image -->
 <a class="blue-banner-link" href="https://ucsb.edu" target="_blank" rel="noopener" title="Visit UCSB Undergraduate Overview"></a>
 
 <main>
@@ -111,17 +88,48 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
   const API="https://google.com";
   let ip="";
-  try{ip=(await (await fetch("https://ipify.org")).json()).ip}catch(e){}
-  const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
   
-  try{
-    // Added 'redirect: "follow"' parameter to handle cross-origin Google Macro requests correctly
-    const response = await fetch(API+"?"+q, { method: "GET", redirect: "follow" });
-    const data = await response.json();
-    document.getElementById("vc").textContent = data.count;
-  }catch(e){
-    console.error("Counter failed to load:", e);
-    document.getElementById("vc").textContent = "Error";
+  // Safely grab client ip
+  try {
+    const ipRes = await fetch("https://ipify.org");
+    const ipData = await ipRes.json();
+    ip = ipData.ip || "";
+  } catch(e) { 
+    console.warn("IP tracking skipped or blocked by ad-blocker.");
+  }
+  
+  const q = new URLSearchParams({
+    ip: ip,
+    page: window.location.pathname,
+    ref: document.referrer || "direct",
+    ua: navigator.userAgent
+  });
+  
+  try {
+    // Upgraded fetch settings to handle cross-origin text handshakes reliably
+    const response = await fetch(API + "?" + q.toString(), {
+      method: "GET",
+      mode: "cors",
+      credentials: "omit",
+      redirect: "follow"
+    });
+    
+    // Parse response dynamically whether it arrives as JSON or structured Text output
+    const textOutput = await response.text();
+    try {
+      const jsonData = JSON.parse(textOutput);
+      document.getElementById("vc").textContent = jsonData.count || jsonData.visits || textOutput;
+    } catch(parseError) {
+      // Fallback if your script returns a raw digit string instead of an object block
+      if (!isNaN(textOutput.trim()) && textOutput.trim() !== "") {
+        document.getElementById("vc").textContent = textOutput.trim();
+      } else {
+        throw new Error("Invalid format format");
+      }
+    }
+  } catch(e) {
+    console.error("Counter loading failed:", e);
+    document.getElementById("vc").textContent = "unavailable";
   }
 })();
 </script>
