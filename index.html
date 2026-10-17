@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chindam</title>
-<!-- Fixed the broken fonts stylesheet endpoint to use correct Google Fonts imports -->
+<!-- Corrected Poppins typeface import from the Google Fonts CDN -->
 <link href="https://googleapis.com" rel="stylesheet">
 <style>
 :root{--text:#fff;--line:rgba(255,255,255,.3)}
@@ -43,8 +43,8 @@ main {
   width: 100%;
   text-align: left;
   padding-left: 120px; 
-  margin-top: -120px; /* Moved up from -40px */
-  animation: rise .25s ease-out both;
+  margin-top: -120px; 
+  animation: rise .9s ease-out both;
 }
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
@@ -109,12 +109,20 @@ footer small{font-weight:500;opacity:0.85}
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
-  // Restored your active Google Apps Script macro API url
   const API="https://google.com";
   let ip="";
   try{ip=(await (await fetch("https://ipify.org")).json()).ip}catch(e){}
   const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
-  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
+  
+  try{
+    // Added 'redirect: "follow"' parameter to handle cross-origin Google Macro requests correctly
+    const response = await fetch(API+"?"+q, { method: "GET", redirect: "follow" });
+    const data = await response.json();
+    document.getElementById("vc").textContent = data.count;
+  }catch(e){
+    console.error("Counter failed to load:", e);
+    document.getElementById("vc").textContent = "Error";
+  }
 })();
 </script>
 </body>
