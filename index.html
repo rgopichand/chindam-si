@@ -4,133 +4,83 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chindam</title>
-<link href="https://googleapis.com" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--text:#fff;--line:rgba(255,255,255,.3)}
+:root{--line:rgba(255,255,255,.3)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{
-  font-family:Poppins,system-ui,sans-serif;color:var(--text);
+  font-family:Poppins,system-ui,sans-serif;
+  /* Replaced Unsplash image with your local asset name */
   background:#1f3b2d url("26340640.jpg") center/cover fixed;
   display:flex;flex-direction:column;min-height:100vh;
 }
+/* Removed the body::before dark fading background element entirely */
 
-/* Invisible hotspot linking the background image's blue banner */
-.blue-banner-link {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 220px;
-  height: 55px;
-  z-index: 100;
-  cursor: pointer;
-  background: transparent;
+main{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px 16px;
 }
-
-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
-  position: relative;
-}
-
-/* Shifted container up to position elements nicely on the wall */
-.card {
-  max-width: 650px;
-  width: 100%;
-  text-align: left;
-  padding-left: 120px; 
-  margin-top: -120px; 
-  animation: rise .9s ease-out both;
+.card{
+  max-width:620px;
+  width:100%;
+  text-align:center;
+  /* Removed glass backgrounds, backdrop filters, and borders */
+  /* Adjusted margin-top negatively to pull the element further up the page */
+  margin-top: -140px; 
+  animation:rise .9s ease-out both;
 }
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 
-.soon {
-  display: inline-block;
-  padding: 4px 14px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  background: rgba(0,0,0,0.4);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+.soon{
+  display:inline-block;
+  padding:4px 14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  font-size:14px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,0.4);
 }
 
-footer {
-  text-align: center;
-  padding: 18px 16px;
-  font-size: 14px;
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(6px);
-  color: #000;
+footer{
+  text-align:center;
+  padding:18px 16px;
+  font-size:14px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(6px);
+  /* Changed overall footer content color to black */
+  color:#000;
 }
-footer small{font-weight:500;opacity:0.85}
+footer small{
+  font-weight:500;
+  opacity:.85;
+}
 </style>
 </head>
 <body>
-
-<a class="blue-banner-link" href="https://ucsb.edu" target="_blank" rel="noopener" title="Visit UCSB Undergraduate Overview"></a>
-
 <main>
   <div class="card">
-      <span class="soon">Site coming soon</span>
+    <span class="soon">Site coming soon</span>
   </div>
 </main>
 
 <footer>© <span id="yr"></span> Chindam.SI · Visitors: <span id="vc">…</span><br>
-<small>This site logs visitor info for basic analytics.</small></footer>
+<small>This site logs visitor IP addresses for basic analytics.</small></footer>
 
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 (async()=>{
-  const API="https://google.com";
+  const API="https://script.google.com/macros/s/AKfycbwmtmxj2MdOXGudfQLnpw8beCOkWugsuvPyuC3oWXVd8eBkcDqkmhjrdEEnQQlmqW31/exec";
   let ip="";
-  
-  // Safely grab client ip
-  try {
-    const ipRes = await fetch("https://ipify.org");
-    const ipData = await ipRes.json();
-    ip = ipData.ip || "";
-  } catch(e) { 
-    console.warn("IP tracking skipped or blocked by ad-blocker.");
-  }
-  
-  const q = new URLSearchParams({
-    ip: ip,
-    page: window.location.pathname,
-    ref: document.referrer || "direct",
-    ua: navigator.userAgent
-  });
-  
-  try {
-    // Upgraded fetch settings to handle cross-origin text handshakes reliably
-    const response = await fetch(API + "?" + q.toString(), {
-      method: "GET",
-      mode: "cors",
-      credentials: "omit",
-      redirect: "follow"
-    });
-    
-    // Parse response dynamically whether it arrives as JSON or structured Text output
-    const textOutput = await response.text();
-    try {
-      const jsonData = JSON.parse(textOutput);
-      document.getElementById("vc").textContent = jsonData.count || jsonData.visits || textOutput;
-    } catch(parseError) {
-      // Fallback if your script returns a raw digit string instead of an object block
-      if (!isNaN(textOutput.trim()) && textOutput.trim() !== "") {
-        document.getElementById("vc").textContent = textOutput.trim();
-      } else {
-        throw new Error("Invalid format format");
-      }
-    }
-  } catch(e) {
-    console.error("Counter loading failed:", e);
-    document.getElementById("vc").textContent = "unavailable";
-  }
+  try{ip=(await (await fetch("https://api.ipify.org?format=json")).json()).ip}catch(e){}
+  const q=new URLSearchParams({ip,page:location.pathname,ref:document.referrer,ua:navigator.userAgent});
+  try{document.getElementById("vc").textContent=(await (await fetch(API+"?"+q)).json()).count}catch(e){}
 })();
 </script>
 </body>
