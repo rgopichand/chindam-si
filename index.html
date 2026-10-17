@@ -6,7 +6,7 @@
 <title>Chindam</title>
 <link href="https://googleapis.com" rel="stylesheet">
 <style>
-:root{--text:#fff;--accent:#9be7c4;--line:rgba(255,255,255,.3)}
+:root{--text:#fff;--line:rgba(255,255,255,.3)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{
@@ -14,30 +14,93 @@ body{
   background:#1f3b2d url("26340640.jpg") center/cover fixed;
   display:flex;flex-direction:column;min-height:100vh;
 }
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px}
-.card{
-  max-width:620px;width:100%;text-align:center;padding:16px;
-  animation:rise .9s ease-out both;
+
+/* Invisible hotspot linking the background image's blue banner */
+.blue-banner-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 55px;
+  z-index: 100;
+  cursor: pointer;
+  background: transparent;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  position: relative;
+}
+
+/* Shifted container to line up text directly to the right side of the emblem on the wall */
+.card {
+  max-width: 650px;
+  width: 100%;
+  text-align: left;
+  padding-left: 120px; 
+  margin-top: -40px;
+  animation: rise .9s ease-out both;
 }
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-h1{font-size:clamp(30px,6vw,48px);margin:0 0 12px;font-weight:700;letter-spacing:.5px;text-shadow:0 2px 10px rgba(0,0,0,0.5)}
+
+/* Styled to match the metallic depth of the physical letters on the wall */
+h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  margin: 0 0 8px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 0px rgba(0,0,0,0.2);
+}
 .wave{display:inline-block;animation:wave 2s infinite;transform-origin:70% 70%}
 @keyframes wave{0%,60%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}}
-p{font-weight:300;font-size:18px;line-height:1.6;margin:0 0 10px;text-shadow:0 2px 8px rgba(0,0,0,0.5)}
-.soon{display:inline-block;margin:14px 0 26px;padding:4px 14px;border:1px solid var(--line);border-radius:20px;font-size:14px;letter-spacing:2px;text-transform:uppercase;background:rgba(0,0,0,0.2)}
-.btn{display:inline-block;padding:12px 24px;border-radius:30px;background:var(--accent);color:#123;font-weight:500;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 12px rgba(0,0,0,0.2)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.35)}
-footer{text-align:center;padding:18px 16px;font-size:14px;background:rgba(0,0,0,.45);backdrop-filter:blur(6px)}
-footer small{opacity:.75}
+
+p {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 16px;
+  color: #e0e0e0;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+}
+
+.soon {
+  display: inline-block;
+  padding: 4px 14px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.4);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+footer {
+  text-align: center;
+  padding: 18px 16px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(6px);
+  color: #000;
+}
+footer small{font-weight:500;opacity:0.85}
 </style>
 </head>
 <body>
+
+<!-- This anchor covers the top-left area where the blue banner sits on the image -->
+<a class="blue-banner-link" href="https://ucsb.edu" target="_blank" rel="noopener" title="Visit UCSB Undergraduate Overview"></a>
+
 <main>
   <div class="card">
     <h1>What's up <span class="wave">👋</span></h1>
     <p>Hope you're doing well, and thanks for visiting the page.</p>
-    <span class="soon">Site coming soon</span><br>
-    <a class="btn" href="https://ucsb.edu" target="_blank" rel="noopener">Visit UCSB Undergraduate Overview</a>
+    <span class="soon">Site coming soon</span>
   </div>
 </main>
 
